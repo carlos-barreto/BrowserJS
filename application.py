@@ -151,7 +151,7 @@ def gettts():
     speech_config.speech_synthesis_voice_name = voice
 
     offsets=[]
-
+    
     def wordbound(evt):
         offsets.append( evt.audio_offset / 10000)
 
@@ -159,7 +159,7 @@ def gettts():
     # This means the audio output data will not be written to any output channel.
     # You can just get the audio from the result.
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=None)
-
+    print(speech_synthesizer.SpeechSynthesisResult())
     # Subscribes to word boundary event
     # The unit of evt.audio_offset is tick (1 tick = 100 nanoseconds), divide it by 10,000 to convert to milliseconds.
     speech_synthesizer.synthesis_word_boundary.connect(wordbound)
@@ -169,8 +169,9 @@ def gettts():
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
         #print("Speech synthesized for text [{}]".format(reftext))
         #print(offsets)
+        #SpeechSynthesisResult.getAudioLength()--------------->
         audio_data = result.audio_data
-        #print(audio_data)
+        print(audio_data)
         #print("{} bytes of audio data received.".format(len(audio_data)))
         
         response = make_response(audio_data)

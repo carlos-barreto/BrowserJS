@@ -1,3 +1,23 @@
+/*--------------index----------------*/
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgb(0 0 0 / 17%);
+    box-shadow: inset 0 0 6px rgb(0 0 0 / 17%);
+    background-color: #fff;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    -webkit-box-shadow: inset 0 0 6px rgb(0 0 0 / 17%);
+    background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgb(0 0 0 / 17%);
+    background-color: #fd3300 !important;
+}
+
+
 html, body {
     padding-left: 5%;
     margin-left: 5%;

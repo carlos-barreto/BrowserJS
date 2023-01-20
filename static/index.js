@@ -1,3 +1,4 @@
+var duration = document.getElementById("duration");
 var accuracyscore = document.getElementById("accuracyscore");
 var fluencyscore = document.getElementById("fluencyscore");
 var completenessscore = document.getElementById("completenessscore");
@@ -279,8 +280,8 @@ document.getElementById("buttonmic").onclick = function () {
     } else if (start) {
       start = false;
       stop = true;
-      this.innerHTML = "<span class='fa fa-refresh'></span>Refresh";
-      this.className = "green-button";
+      this.innerHTML = "<span class=''></span>Refresh";
+      this.className = "button fit fa icon solid fa-refresh";
       rec.stop();
 
       console.log("stop", start, stop, rec, gumStream);
@@ -313,13 +314,19 @@ document.getElementById("buttonmic").onclick = function () {
       ttbutton.className = "btn";
       reftextval = reftext.value;
 
-      this.innerHTML = "<span class='fa fa-stop'></span>Stop";
-      this.className = "red-button";
+      this.innerHTML = "<span class=''></span>Stop";
+      this.className = "button fit fa icon solid fa-stop";
     }
   }
 };
 
 function fillDetails(words) {
+  var newArray = words.filter(function (el)
+    {
+      return Math.min(el.AccuracyScore);
+    }
+    );
+    console.log(newArray);
   for (var wi in words) {
     var w = words[wi];
     var countp = 0;
@@ -382,8 +389,9 @@ function fillDetails(words) {
   }
 }
 
-function fillData(data) {
-  document.getElementById("summarytable").style.display = "flex";
+function fillData(data, durationFull) {
+  document.getElementById("summarytable").style.display = "flex";  
+  duration.innerText = nanosegundosToSeconds(durationFull.toFixed(2).split('.').join(""));
   accuracyscore.innerText = data.AccuracyScore;
   fluencyscore.innerText = data.FluencyScore;
   completenessscore.innerText = data.CompletenessScore;
@@ -430,7 +438,7 @@ function createDownloadLink(blob) {
     const data = JSON.parse(request.responseText);
 
     if (data.RecognitionStatus == "Success") {
-      fillData(data.NBest[0]);
+      fillData(data.NBest[0], data.Duration);
       document.getElementById("recordloader").style.display = "none";
       document.getElementById("metrics").style.display = "block";
     } else {
@@ -448,4 +456,68 @@ function createDownloadLink(blob) {
   request.send(data);
 
   return false;
+}
+
+var vcInfo = {
+  u1: {
+    invFactor: 0,
+    mulFactor: 1e-9,
+    addFactor: 0,
+  },
+  u2: {
+    invFactor: 0,
+    mulFactor: 1,
+    addFactor: 0,
+  },
+};
+
+function nanosegundosToSeconds(g) {
+  var g = parseFloat(g);
+  if (!isNaN(g)) {
+    var r;
+    if (vcInfo.u1.invFactor == 1 || vcInfo.u2.invFactor == 1) {
+      if (g == 0) {
+        r = "";
+      } else {
+        if (vcInfo.u1.invFactor == 1)
+          r = vcInfo.u1.mulFactor / vcInfo.u2.mulFactor / g;
+        else r = vcInfo.u2.mulFactor / vcInfo.u1.mulFactor / g;
+        r = roundresult(r);
+      }
+    } else {
+      r =
+        ((g + vcInfo.u1.addFactor) * vcInfo.u1.mulFactor) /
+          vcInfo.u2.mulFactor -
+        vcInfo.u2.addFactor;
+      r = roundresult(r);
+    }
+    return r;
+  }
+}
+function roundnum(x, p) {
+  var i;
+  var n = parseFloat(x);
+  var m = n.toPrecision(p + 1);
+  var y = String(m);
+  i = y.indexOf("e");
+  if (i == -1) i = y.length;
+  j = y.indexOf(".");
+  if (i > j && j != -1) {
+    while (i > 0) {
+      if (y.charAt(--i) == "0") y = removeAt(y, i);
+      else break;
+    }
+    if (y.charAt(i) == ".") y = removeAt(y, i);
+  }
+  return y;
+}
+function removeAt(s, i) {
+  s = s.substring(0, i) + s.substring(i + 1, s.length);
+  return s;
+}
+function roundresult(x) {
+  y = parseFloat(x);
+  y = roundnum(y, 13);
+  // console.log('roundresult',y);
+  return y;
 }
