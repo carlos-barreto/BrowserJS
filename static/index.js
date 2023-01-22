@@ -1,4 +1,8 @@
 var duration = document.getElementById("duration");
+var min_accuracyscore = document.getElementById("min_accuracyscore");
+var ineer_level = document.getElementById("level");
+var ineer_score = document.getElementById("score");
+
 var accuracyscore = document.getElementById("accuracyscore");
 var fluencyscore = document.getElementById("fluencyscore");
 var completenessscore = document.getElementById("completenessscore");
@@ -48,6 +52,7 @@ var t1;
 var at;
 
 window.onload = () => {
+  validateStatusLocalStorage();
   if (tflag) {
     tflag = gettoken();
     tflag = false;
@@ -321,12 +326,6 @@ document.getElementById("buttonmic").onclick = function () {
 };
 
 function fillDetails(words) {
-  var newArray = words.filter(function (el)
-    {
-      return Math.min(el.AccuracyScore);
-    }
-    );
-    console.log(newArray);
   for (var wi in words) {
     var w = words[wi];
     var countp = 0;
@@ -390,8 +389,20 @@ function fillDetails(words) {
 }
 
 function fillData(data, durationFull) {
-  document.getElementById("summarytable").style.display = "flex";  
-  duration.innerText = nanosegundosToSeconds(durationFull.toFixed(2).split('.').join(""));
+  document.getElementById("summarytable").style.display = "flex";
+
+  duration.innerText = nanosegundosToSeconds(
+    durationFull.toFixed(2).split(".").join("")
+  );
+
+  var minAccuracyscore = Math.min.apply(
+    Math,
+    data.Words.map(function (o) {
+      return o.AccuracyScore;
+    })
+  );
+  min_accuracyscore.innerText = minAccuracyscore;
+
   accuracyscore.innerText = data.AccuracyScore;
   fluencyscore.innerText = data.FluencyScore;
   completenessscore.innerText = data.CompletenessScore;
@@ -520,4 +531,40 @@ function roundresult(x) {
   y = roundnum(y, 13);
   // console.log('roundresult',y);
   return y;
+}
+
+function validateStatusLocalStorage() {
+  ineer_level.innerText = 1;
+  ineer_score.innerText = 0;
+  let level = window.localStorage.getItem("level");
+  let score = window.localStorage.getItem("score");
+  let history = window.localStorage.getItem("history");
+
+  if (typeof Storage !== "undefined") {
+    // Code for localStorage
+    if (level != null) {
+      if (level <= 1) {
+        window.localStorage.removeItem("score");
+        window.localStorage.setItem("score", 0);
+      } else {
+        if (score != null && score < 0) {
+          window.localStorage.setItem("score", 0);
+        } else {
+          window.localStorage.setItem("score", 0);
+        }
+      }
+
+      window.localStorage.setItem("score", 0);
+    } else {
+      window.localStorage.setItem("level", 1);
+      window.localStorage.setItem("score", 0);
+      window.localStorage.setItem("history", []);
+    }
+  } else {
+    // No web storage Support.
+    console.log("local storage No web storage Support.");
+  }
+
+  ineer_level.innerText = level;
+  ineer_score.innerText = score;
 }
