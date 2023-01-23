@@ -281,15 +281,18 @@ document.getElementById("buttonmic").onclick = function () {
     alert("Reference Text cannot be empty!");
   } else {
     if (stop) {
-      window.location.reload();
+      let history = JSON.parse(window.localStorage.getItem("history"));
+      window.localStorage.removeItem("level");
+      console.log(history);
+      window.localStorage.setItem("level", parseInt(history.level++));
+      // window.location.reload();
     } else if (start) {
       start = false;
       stop = true;
       this.innerHTML = "<span class=''></span>Refresh";
       this.className = "button fit fa icon solid fa-refresh";
       rec.stop();
-
-      console.log("stop", start, stop, rec, gumStream);
+      // console.log("stop", start, stop, rec, gumStream);
       //stop microphone access
       gumStream.getAudioTracks()[0].stop();
 
@@ -402,7 +405,7 @@ function fillData(data, durationFull) {
     })
   );
   min_accuracyscore.innerText = minAccuracyscore;
-
+  updateLocalStorage(window.localStorage.getItem("level"), minAccuracyscore);
   accuracyscore.innerText = data.AccuracyScore;
   fluencyscore.innerText = data.FluencyScore;
   completenessscore.innerText = data.CompletenessScore;
@@ -567,4 +570,30 @@ function validateStatusLocalStorage() {
 
   ineer_level.innerText = level;
   ineer_score.innerText = score;
+}
+
+function updateLocalStorage(getlevel, getscore) {
+  let history = JSON.stringify(window.localStorage.getItem("history"));
+  if (history.level >= 1) {
+    window.localStorage.removeItem("level");
+    let level = window.localStorage.setItem("level", getlevel++);
+    let score = window.localStorage.getItem("score");
+    window.localStorage.removeItem("score");
+    let newscore = window.localStorage.setItem("score", score + getscore);
+
+    let arrayhistory =
+      history != undefined && history.length > 0 ? JSON.parse(history) : [];
+    var obj = { level: level, score: newscore };
+    arrayhistory.push(obj);
+    let newhistory = window.localStorage.setItem("history", arrayhistory);
+  } else if (window.localStorage.getItem("level") <= 1) {
+    // arrayhistory.push({ level: getlevel, score: getscore });
+    let newhistory = window.localStorage.setItem(
+      "history",
+      JSON.stringify({
+        level: getlevel,
+        score: getscore,
+      })
+    );
+  }
 }
