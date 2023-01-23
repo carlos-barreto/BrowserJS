@@ -45,8 +45,8 @@ def gettonguetwister():
                       "Are things getting worse every day? Is progress an impossible goal? In Enlightenment Now, Steven Pinker looks at the big picture of human progress and finds good news. We are living longer, healthier, freer and happier lives.",
                       "Swedish climate activist Greta Thunberg was hauled away and detained on Tuesday during a protest near a German village, being razed to make way for a coal mine expansion.",
                       " Atmospheric carbon from fossil fuel burning is the main human-caused factor in the escalating global warming we are experiencing now. The current level of carbon in our atmosphere is tracked using what is called the Keeling curve. The Keeling curve measures atmospheric carbon in parts per million (ppm)."]
-
-    return jsonify({"tt": random.choice(tonguetwisters)})
+    level = int(request.args.get('level')) - 1
+    return jsonify({"tt": tonguetwisters[level]})
 
 
 @app.route("/getstory", methods=["POST"])
