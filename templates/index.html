@@ -26,100 +26,54 @@
             <div id="main">
                 <div class="inner">
                     <!-- Header -->
-                    <header id="header">
-                        <a href="/" class="logo"><strong>Speetch</strong></a>
+                    <div class="loading col-2" id="recordloader">
+                    </div>
+                    <header class="container align-middle" id="header">
+                        <div class="col-10 align-middle">
+                            <h2 class="display-6"><strong>Asistente de pronunciación</strong></h2>
+                        </div>
+                        <div class="col-2 align-middle">
+                            <div id="recordingsList"></div>
+                        </div>
                     </header>
                     <!-- speetch -->
                     <div class="container-content">
                         <div class="row">
                             <div class="container-fluid">
-                                <!-- Section -->
                                 <section>
-                                    <header class="major">
-                                        <h2>Estadísticas</h2>
-                                    </header>
-                                    <div class="features">
-                                        <article>
-                                            <span class="icon fa-star"></span>
-                                            <div class="content">
-                                                <h3>Nivel&nbsp;#
-                                                    <span id="level">1</span>
-                                                </h3>
-                                            </div>
-                                        </article>
-                                        <article>
-                                            <span class="icon solid fa-info"></span>
-                                            <div class="content">
-                                                <h3>Puntaje&nbsp;= <span id="score">0</span></h3>
-
-                                            </div>
-                                        </article>
-                                        <article>
-                                            <span class="icon solid fa-rocket"></span>
-                                            <div class="content">
-                                                <h3>Duración&nbsp;= <span id="duration"></span></h3>
-
-                                            </div>
-                                        </article>
-                                        <article>
-                                            <span class="icon solid fa-signal"></span>
-                                            <div class="content">
-                                                <h3>Puntuación de precisión&nbsp;= <span id="min_accuracyscore"></span>
-                                                </h3>
-
-                                            </div>
-                                        </article>
-                                    </div>
-                                </section>
-                            </div>
-                            <div class="container-fluid">
-                                <section>
-                                    <header class="major">
-                                        <h2>Referencia de texto</h2>
-                                    </header>
                                     <div class="container" id="ttscont">
-                                        <!-- <div class="button-container">
-                                                            <button id="buttonhear" class="h-button button primary icon solid fa-headphones">
-                                                                Learn Pronunciation
-                                                            </button>
-                                                        </div> -->
-
                                         <div id="ttsList"></div>
                                         <div class="container" id="ttsloader">
                                             <div id="loader"></div>
                                         </div>
                                     </div>
 
-                                    <div class="container" id="formcontainer" style="min-height: 500px">
+                                    <div class="container p-3" id="formcontainer" style="height: 100%">
                                         <form id="reftextform">
-										<textarea style="min-height: 500px" id="reftext" rows="3" cols="80"
-                                                  name="reftext" maxlength="1000"
-                                                  autofocus placeholder="Enter Reference Text here..."
-                                                  disabled></textarea>
+                                            <h2 class="lead" for="reftext">Texto de referencia</h2>
+                                            <textarea style="font-size: 17px; height: 100%; resize: none" id="reftext"
+                                                      rows="3" cols="80"
+                                                      name="reftext" maxlength="1000"
+                                                      autofocus placeholder="Enter Reference Text here..."
+                                                      disabled></textarea>
                                         </form>
                                         <br/>
                                     </div>
 
                                     <div class="container" id="recordcont">
-                                        <div id="recordingsList"></div>
-
-                                        <div class="container" id="recordloader">
-                                            <div id="loader"></div>
-                                        </div>
-
                                         <div id="metrics" class="animate-bottom">
                                             <div class="container">
                                                 <div id="summarytable">
                                                     <table>
                                                         <tr>
-                                                            <th>Duration</th>
-                                                            <th>Accuracy min</th>
-                                                            <th>Accuracy Score</th>
-                                                            <th>Fluency Score</th>
-                                                            <th>Completeness Score</th>
-                                                            <th>Pronunciation Score</th>
-                                                            <th id="woh">Words Omitted</th>
-                                                            <th id="wih">Extra Words Spoken</th>
+                                                            <th>Duración</th>
+                                                            <th>Precisión mínima</th>
+                                                            <th>Puntuación de precisión</th>
+                                                            <th>Puntaje de fluidez</th>
+                                                            <th>Puntuación de integridad</th>
+                                                            <th>Puntaje de pronunciación</th>
+                                                            <th id="woh">Palabras omitidas</th>
+                                                            <th id="wih">Palabras Adicionales Habladas</th>
                                                         </tr>
                                                         <tr>
                                                             <td id="duration"></td>
@@ -148,7 +102,6 @@
                                     </div>
                                 </section>
                             </div>
-
                         </div>
                     </div>
 
@@ -158,12 +111,6 @@
             <!-- Sidebar -->
             <div id="sidebar" style="min-width: 100px">
                 <div class="inner">
-                    <!-- Search -->
-                    <section id="search" class="alt">
-                        <form method="post" action="#">
-                            <input type="text" name="query" id="query" placeholder="Search"/>
-                        </form>
-                    </section>
 
                     <!-- Menu -->
                     <nav id="menu">
@@ -174,7 +121,7 @@
                         <ul>
                             <li>
                                 <button id="buttonhear" class="button fit icon solid fa-headphones">
-                                    aprender pronunciación
+                                    Aprender pronunciación
                                 </button>
                             </li>
                             <li>
@@ -184,15 +131,83 @@
                             </li>
                             <li>
                                 <button id="buttonmic" class="button fit icon solid fa-microphone">
-                                    registro
+                                    Iniciar Grabación
                                 </button>
                             </li>
                         </ul>
+
+                        <header class="major mt-4">
+                            <h2>Estadísticas</h2>
+                        </header>
+
+                        <div class="container-fluid">
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">
+                                            Frase
+                                        </div>
+                                        <div class="card-body">
+                                            <span class="icon fa-star"></span>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <span id="level">1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">
+                                            Puntaje
+                                        </div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-info"></span>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <span id="score">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">
+                                            Duración
+                                        </div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-rocket"></span>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <span id="duration"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">
+                                            Puntuación de precisión
+                                        </div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-signal"></span>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <span id="min_accuracyscore"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </nav>
 
                     <!-- Footer -->
                     <footer id="footeralert">
-                        Please allow the use of your microphone.
+                        Por favor permita el uso de su micrófono.
                     </footer>
                 </div>
             </div>

@@ -308,7 +308,7 @@ document.getElementById("buttonmic").onclick = function () {
         } else if (start) {
             start = false;
             stop = true;
-            this.innerHTML = "<span class=''></span>REGISTRO";
+            this.innerHTML = "<span class=''></span>Iniciar Grabación";
             this.className = "button fit icon solid fa-microphone";
             rec.stop();
             // console.log("stop", start, stop, rec, gumStream);
@@ -340,7 +340,7 @@ document.getElementById("buttonmic").onclick = function () {
             //ttbutton.className = "btn";
             reftextval = reftext.value;
 
-            this.innerHTML = "<span class=''></span>Stop";
+            this.innerHTML = "<span class=''></span>Detener Grabación";
             this.className = "button fit fa icon solid fa-stop";
             localStorage.setItem("level", parseInt(localStorage.getItem("level")) + 1)
         }
@@ -378,13 +378,13 @@ function fillDetails(words) {
                 var tdp = document.createElement("td");
                 tdp.innerText = p.Phoneme;
                 if (p.AccuracyScore >= phthreshold1) {
-                    tdp.style.backgroundColor = "green";
+                    tdp.style.backgroundColor = "#27AE60";
                 } else if (p.AccuracyScore >= phthreshold2) {
-                    tdp.style.backgroundColor = "lightgreen";
+                    tdp.style.backgroundColor = "#2ECC71";
                 } else if (p.AccuracyScore >= phthreshold3) {
-                    tdp.style.backgroundColor = "yellow";
+                    tdp.style.backgroundColor = "#F1C40F";
                 } else {
-                    tdp.style.backgroundColor = "red";
+                    tdp.style.backgroundColor = "#E74C3C";
                 }
                 phonemerow.appendChild(tdp);
 
@@ -401,9 +401,9 @@ function fillDetails(words) {
             tdw.appendChild(x);
             tdw.colSpan = countp;
             if (w.ErrorType == "None") {
-                tdw.style.backgroundColor = "lightgreen";
+                tdw.style.backgroundColor = "#2ECC71";
             } else {
-                tdw.style.backgroundColor = "red";
+                tdw.style.backgroundColor = "#E74C3C";
             }
             wordrow.appendChild(tdw);
         }
@@ -478,8 +478,10 @@ function createDownloadLink(blob) {
 
         } else {
             alert("Did not catch audio properly! Please try again.");
+
             console.log("Server returned: Error");
             console.log(data.RecognitionStatus);
+            document.getElementById("recordloader").style.display = "none";
         }
     };
     // Add data to send with request
