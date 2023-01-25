@@ -2,6 +2,15 @@ var duration = document.getElementById("duration");
 var min_accuracyscore = document.getElementById("min_accuracyscore");
 var ineer_level = document.getElementById("level");
 var ineer_score = document.getElementById("score");
+/* Nuevas variables */
+var ineer_num_words = document.getElementById("num_words"); //cantidad de palabras
+var ineer_machine_seconds = document.getElementById("machine_seconds"); //segundos maquina
+var ineer_user_seconds = document.getElementById("user_seconds"); //segundos usuario
+var ineer_native_words = document.getElementById("native_words");
+var ineer_native_words_percentage = document.getElementById("native_words_percentage");
+var ineer_user_words = document.getElementById("user_words");
+var ineer_user_words_percentage = document.getElementById("user_words_percentage");
+
 
 var accuracyscore = document.getElementById("accuracyscore");
 var fluencyscore = document.getElementById("fluencyscore");
@@ -429,6 +438,19 @@ function fillData(data, durationFull) {
     fluencyscore.innerText = data.FluencyScore;
     completenessscore.innerText = data.CompletenessScore;
     pronscore.innerText = parseInt(data.PronScore, 10);
+    pronscore.innerText = parseInt(data.PronScore, 10);
+    /* var estadisticas */
+    ineer_num_words.innerText = data.Words.length;
+    // ineer_machine_seconds.innerText = 'pendiente por adicionar al back';
+    ineer_user_seconds.innerText = nanosegundosToSeconds(
+        durationFull.toFixed(2).split(".").join("")
+    );
+    ineer_native_words.innerText = data.Words.length * 60;
+    ineer_native_words_percentage.innerText = '100,00%';
+    ineer_user_words.innerText = data.Words.length;
+    ineer_user_words_percentage.innerText = data.Words.length * 60/ nanosegundosToSeconds(
+        durationFull.toFixed(2).split(".").join("")
+    ) + '%';
 
     fillDetails(data.Words);
     wordsomitted.innerText = omittedwords;

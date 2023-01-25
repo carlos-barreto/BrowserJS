@@ -6,225 +6,317 @@
 -->
 <html>
 
-    <head>
-        <title>Pronunciation Assessment</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
-        <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='/assets/css/main.css') }}"/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-              crossorigin="anonymous">
+<head>
+    <title>Pronunciation Assessment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='/assets/css/main.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+</head>
 
-    </head>
-
-    <body class="is-preload">
-        <!-- Wrapper -->
-        <div id="wrapper">
-            <!-- Main -->
-            <div id="main">
-                <div class="inner">
-                    <!-- Header -->
-                    <div class="loading col-2" id="recordloader">
+<body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <!-- Header -->
+                <div class="loading col-2" id="recordloader"></div>
+                <header class="container align-middle" id="header">
+                    <div class="col-10 align-middle">
+                        <h2 class="display-6">
+                            <strong>Asistente de pronunciación</strong>
+                        </h2>
                     </div>
-                    <header class="container align-middle" id="header">
-                        <div class="col-10 align-middle">
-                            <h2 class="display-6"><strong>Asistente de pronunciación</strong></h2>
-                        </div>
-                        <div class="col-2 align-middle">
-                            <div id="recordingsList"></div>
-                        </div>
-                    </header>
-                    <!-- speetch -->
-                    <div class="container-content">
-                        <div class="row">
-                            <div class="container-fluid">
-                                <section>
-                                    <div class="container" id="ttscont">
-                                        <div id="ttsList"></div>
-                                        <div class="container" id="ttsloader">
-                                            <div id="loader"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="container p-3" id="formcontainer" style="height: 100%">
-                                        <form id="reftextform">
-                                            <h2 class="lead" for="reftext">Texto de referencia</h2>
-                                            <textarea style="font-size: 17px; height: 100%; resize: none" id="reftext"
-                                                      rows="3" cols="80"
-                                                      name="reftext" maxlength="1000"
-                                                      autofocus placeholder="Enter Reference Text here..."
-                                                      disabled></textarea>
-                                        </form>
-                                        <br/>
-                                    </div>
-
-                                    <div class="container" id="recordcont">
-                                        <div id="metrics" class="animate-bottom">
-                                            <div class="container">
-                                                <div id="summarytable">
-                                                    <table>
-                                                        <tr>
-                                                            <th>Duración</th>
-                                                            <th>Precisión mínima</th>
-                                                            <th>Puntuación de precisión</th>
-                                                            <th>Puntaje de fluidez</th>
-                                                            <th>Puntuación de integridad</th>
-                                                            <th>Puntaje de pronunciación</th>
-                                                            <th id="woh">Palabras omitidas</th>
-                                                            <th id="wih">Palabras Adicionales Habladas</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td id="duration"></td>
-                                                            <td id="min_accuracyscore"></td>
-                                                            <td id="accuracyscore"></td>
-                                                            <td id="fluencyscore"></td>
-                                                            <td id="completenessscore"></td>
-                                                            <td id="pronscore"></td>
-                                                            <td id="wordsomitted"></td>
-                                                            <td id="wordsinserted"></td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <div class="container">
-                                                <div id="detailedtable">
-                                                    <table>
-                                                        <tr id="wordrow"></tr>
-                                                        <tr id="phonemerow"></tr>
-                                                        <tr id="scorerow"></tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-                        </div>
+                    <div class="col-2 align-middle">
+                        <div id="recordingsList"></div>
                     </div>
-
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <div id="sidebar" style="min-width: 100px">
-                <div class="inner">
-
-                    <!-- Menu -->
-                    <nav id="menu">
-                        <header class="major">
-                            <h2>Menu</h2>
-                        </header>
-
-                        <ul>
-                            <li>
-                                <button id="buttonhear" class="button fit icon solid fa-headphones">
-                                    Aprender pronunciación
-                                </button>
-                            </li>
-                            <li>
-                                <button id="randomtt" class="button primary fit icon solid fa-arrow-right">
-                                    Siguiente Frase
-                                </button>
-                            </li>
-                            <li>
-                                <button id="buttonmic" class="button fit icon solid fa-microphone">
-                                    Iniciar Grabación
-                                </button>
-                            </li>
-                        </ul>
-
-                        <header class="major mt-4">
-                            <h2>Estadísticas</h2>
-                        </header>
-
+                </header>
+                <!-- speetch -->
+                <div class="container-content">
+                    <div class="row">
                         <div class="container-fluid">
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="card text-center h-100">
-                                        <div class="card-header">
-                                            Frase
-                                        </div>
-                                        <div class="card-body">
-                                            <span class="icon fa-star"></span>
-                                        </div>
-                                        <div class="card-footer text-muted">
-                                            <span id="level">1</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="card text-center h-100">
-                                        <div class="card-header">
-                                            Puntaje
-                                        </div>
-                                        <div class="card-body">
-                                            <span class="icon solid fa-info"></span>
-                                        </div>
-                                        <div class="card-footer text-muted">
-                                            <span id="score">0</span>
-                                        </div>
+                            <section>
+                                <div class="container" id="ttscont">
+                                    <div id="ttsList"></div>
+                                    <div class="container" id="ttsloader">
+                                        <div id="loader"></div>
                                     </div>
                                 </div>
 
-                            </div>
+                                <div class="container p-3" id="formcontainer" style="height: 100%">
+                                    <form id="reftextform">
+                                        <h2 class="lead" for="reftext">Texto de referencia</h2>
+                                        <textarea style="font-size: 17px; height: 100%; resize: none" id="reftext"
+                                            rows="3" cols="80" name="reftext" maxlength="1000" autofocus
+                                            placeholder="Enter Reference Text here..." disabled></textarea>
+                                    </form>
+                                    <br />
+                                </div>
+                            </section>
+                            <section>
+                                <header class="major">
+                                    <h2>Menu</h2>
+                                </header>
 
-                            <div class="row mt-2">
-                                <div class="col-6">
-                                    <div class="card text-center h-100">
-                                        <div class="card-header">
-                                            Duración
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button id="buttonhear" class="button fit icon solid fa-headphones">
+                                            Aprender pronunciación
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button id="randomtt" class="button primary fit icon solid fa-arrow-right">
+                                            Siguiente Frase
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button id="buttonmic" class="button fit icon solid fa-microphone">
+                                            Iniciar Grabación
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                            <section>
+
+                                <div class="container" id="recordcont">
+                                    <div id="metrics" class="animate-bottom">
+                                        <div class="container">
+                                            <div id="summarytable">
+                                                <!-- <table>
+                                                    <tr>
+                                                        <th>Duración</th>
+                                                        <th>Precisión mínima</th>
+                                                        <th>Puntuación de precisión</th>
+                                                        <th>Puntaje de fluidez</th>
+                                                        <th>Puntuación de integridad</th>
+                                                        <th>Puntaje de pronunciación</th>
+                                                        <th id="woh">Palabras omitidas</th>
+                                                        <th id="wih">Palabras Adicionales Habladas</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td id="duration"></td>
+                                                        <td id="min_accuracyscore"></td>
+                                                        <td id="accuracyscore"></td>
+                                                        <td id="fluencyscore"></td>
+                                                        <td id="completenessscore"></td>
+                                                        <td id="pronscore"></td>
+                                                        <td id="wordsomitted"></td>
+                                                        <td id="wordsinserted"></td>
+                                                    </tr>
+                                                </table> -->
+                                            </div>
                                         </div>
-                                        <div class="card-body">
-                                            <span class="icon solid fa-rocket"></span>
-                                        </div>
-                                        <div class="card-footer text-muted">
-                                            <span id="duration"></span>
+
+                                        <div class="container">
+                                            <div id="detailedtable">
+                                                <table>
+                                                    <tr id="wordrow"></tr>
+                                                    <tr id="phonemerow"></tr>
+                                                    <tr id="scorerow"></tr>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="card text-center h-100">
-                                        <div class="card-header">
-                                            Puntuación de precisión
-                                        </div>
-                                        <div class="card-body">
-                                            <span class="icon solid fa-signal"></span>
-                                        </div>
-                                        <div class="card-footer text-muted">
-                                            <span id="min_accuracyscore"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                            </section>
 
-                            </div>
                         </div>
-
-                    </nav>
-
-                    <!-- Footer -->
-                    <footer id="footeralert">
-                        Por favor permita el uso de su micrófono.
-                    </footer>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Scripts -->
-        <script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
-        <script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
-        <script src="{{ url_for('static', filename='index.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-                crossorigin="anonymous"></script>
+        <!-- Sidebar -->
+        <div id="sidebar" style="min-width: 100px">
+            <div class="inner">
+                <!-- Menu -->                
+                <nav id="menu">
+                    <section class="estadisticas_algoritmos">
+                        <header class="major mt-4">
+                            <h2>Estadísticas de algoritmos</h2>
+                        </header>
+    
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Duración</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-star"></span>
+                                            <span id="duration"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Precisión mínima</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="min_accuracyscore"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Puntuación de precisión</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="accuracyscore"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Puntaje de fluidez</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="fluencyscore"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Puntuación de integridad</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="completenessscore"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Puntaje de pronunciación</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="pronscore"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2" id="woh"> 
+                                    <div class="card text-center h-100">
+                                        <div class="card-header" >Palabras omitidas</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="wordsomitted"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2" id="wih">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header" >Palabras Adicionales Habladas</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-circle"></span>
+                                            <span id="wordsinserted"></span>
+                                        </div>
+                                    </div>
+                                </div>                                                               
+                            </div>
+                        </div>
+                    </section>
+                    <section class="estadisticas_calculadas">
+                        <header class="major mt-4">
+                            <h2>Estadísticas de calculadas</h2>
+                        </header>
+    
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Frase</div>
+                                        <div class="card-body">
+                                            <span class="icon fa-star"></span>
+                                            <span id="level">1</span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Palabaras</div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-info"></span>
+                                            <span id="num_words">0</span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                           
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Segundos maquina</div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-rocket"></span>
+                                            <span id="machine_seconds"></span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Segundos usuario</div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-rocket"></span>
+                                            <span id="user_seconds"></span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Nativo</div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-rocket"></span>
+                                            <span id="native_words"></span><br>
+                                            <span id="native_words_percentage">%100.00</span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Usuario</div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-rocket"></span>
+                                            <span id="user_words"></span><br>
+                                            <span id="user_words_percentage"></span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="card text-center h-100">
+                                        <div class="card-header">Puntaje</div>
+                                        <div class="card-body">
+                                            <span class="icon solid fa-rocket"></span>
+                                            <span id="score"></span>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </nav>
 
-    </body>
+                <!-- Footer -->
+                <footer id="footeralert">
+                    Por favor permita el uso de su micrófono.
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+    <script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
 
 </html>
