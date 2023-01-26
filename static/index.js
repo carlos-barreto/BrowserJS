@@ -318,7 +318,7 @@ document.getElementById("buttonmic").onclick = function () {
             start = false;
             stop = true;
             this.innerHTML = "<span class=''></span>Iniciar Grabación";
-            this.className = "button fit icon solid fa-microphone";
+            this.className = "btn btn-primary";
             rec.stop();
             // console.log("stop", start, stop, rec, gumStream);
             //stop microphone access
@@ -350,7 +350,7 @@ document.getElementById("buttonmic").onclick = function () {
             reftextval = reftext.value;
 
             this.innerHTML = "<span class=''></span>Detener Grabación";
-            this.className = "button fit fa icon solid fa-stop";
+            this.className = "btn btn-danger";
             localStorage.setItem("level", parseInt(localStorage.getItem("level")) + 1)
         }
     }
@@ -448,7 +448,7 @@ function fillData(data, durationFull) {
     ineer_native_words.innerText = data.Words.length * 60;
     ineer_native_words_percentage.innerText = '100,00%';
     ineer_user_words.innerText = data.Words.length;
-    ineer_user_words_percentage.innerText = data.Words.length * 60/ nanosegundosToSeconds(
+    ineer_user_words_percentage.innerText = data.Words.length * 60 / nanosegundosToSeconds(
         durationFull.toFixed(2).split(".").join("")
     ) + '%';
 
