@@ -38,7 +38,7 @@ def gettoken():
 
 @app.route("/gettonguetwister", methods=["POST"])
 def gettonguetwister():
-    tonguetwisters = ["hello no words",
+    tonguetwisters = [
                       "English is also considered an essential subject at school. English classes are compulsory from seventh to ninth grade and most students study it until the 12th grade, when they cram for college entrance examinations. The college entrance tests usually give English disproportionately higher weight than other subjects.",
                       "Sleeping only seven hours a night, Kilian Jornet seems almost superhuman. His resting heartbeat is extremely low at 33 beats per minute, compared with the average man's 60 per minute or an athlete's 40 per minute. He breathes more efficiently than average people too, taking in more oxygen per breath, and he has a much faster recovery time after exercise as his body quickly breaks down lactic acid – the acid in muscles that causes pain after exercise.",
                       "In a piece of research done on smiles across cultures, the researchers found that smiling individuals were considered more intelligent than non-smiling people in countries such as Germany, Switzerland, China and Malaysia. However, in countries like Russia, Japan, South Korea and Iran, pictures of smiling faces were rated as less intelligent than the non-smiling ones. Meanwhile, in countries like India, Argentina and the Maldives, smiling was associated with dishonesty.",

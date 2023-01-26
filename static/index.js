@@ -462,7 +462,7 @@ function fillData(data, durationFull) {
 }
 
 function createDownloadLink(blob) {
-    document.getElementById("recordloader").style.display = "block";
+    document.getElementById("recordloader").style.display = "flex";
 
     document.getElementById("footeralert").style.display = "none";
     var url = URL.createObjectURL(blob);
