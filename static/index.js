@@ -14,12 +14,7 @@ var ineer_user_words = document.getElementById("user_words");
 var ineer_user_words_percentage = document.getElementById(
   "user_words_percentage"
 );
-var ineer_user_porcentage_user_1 = document.getElementById(
-  "porcentage_user_1"
-);
-var ineer_user_porcentage_user_2 = document.getElementById(
-  "porcentage_user_2"
-);
+var ineer_user_porcentage_user_1 = document.getElementById("porcentage_user_1");
 
 var accuracyscore = document.getElementById("accuracyscore");
 var fluencyscore = document.getElementById("fluencyscore");
@@ -42,6 +37,22 @@ var ttbutton = document.getElementById("randomtt");
 var hbutton = document.getElementById("buttonhear");
 var recordingsList = document.getElementById("recordingsList");
 var ttsList = document.getElementById("ttsList");
+var fraseLevel = document.getElementById("fraseLevel");
+
+var cuadrosAlgoritmos = document.getElementById("cuadrosAlgoritmos");
+var estadisticasAlgoritmos = document.getElementById("estadisticasAlgoritmos");
+var nextAlgoritmosButton = document.getElementById("nextAlgoritmosButton");
+
+var nextAlgoritmosCalculadosButton = document.getElementById(
+  "nextAlgoritmosCalculadosButton"
+);
+var cuadrosAlgoritmosCalculados = document.getElementById(
+  "cuadrosAlgoritmosCalculados"
+);
+var estadisticasAlgoritmosCalculados = document.getElementById(
+  "estadisticasAlgoritmosCalculados"
+);
+
 var lastgettstext;
 var objectUrlMain;
 var wordaudiourls = new Array();
@@ -68,9 +79,27 @@ var wordlist;
 var t0 = 0;
 var t1;
 var at;
+const myChartBar = document.getElementById("myChartBar");
+const myChartRadar = document.getElementById("myChartRadar");
 
-window.onload = () => {  
+const myChartBarCalculados = document.getElementById("myChartBarCalculados");
+const myChartRadarCalculados = document.getElementById(
+  "myChartRadarCalculados"
+);
 
+let p_minima = 0;
+let p_precision = 0;
+let duracion = 0;
+let p_fluidez = 0;
+let p_integridad = 0;
+let p_pronunciacion = 0;
+
+var newMyChart;
+var newMyChartRadar;
+var newMyChartBarCalculados;
+var newMyChartRadarCalculados;
+
+window.onload = () => {
   validateStatusLocalStorage();
   if (tflag) {
     tflag = gettoken();
@@ -90,13 +119,117 @@ window.onload = () => {
     reftextval = data.tt;
     reftext.value = reftextval;
     reftext.innerText = reftextval;
+    fraseLevel.innerText = `${localStorage.getItem("level")} de 7`;
   };
+
+  // const labels = "Meses"
+  const labels = [];
+  const calculadasDataBar = {
+    //ok
+    labels: [],
+    datasets: [],
+  };
+  const algoritmosDataBar = {
+    //ok
+    labels: [],
+    datasets: [],
+  };
+
+  const calculadasDataRadar = {
+    labels: [
+      "Precisión Mínima",
+      "P. de Precisión",
+      "Duración",
+      "P. de Fluidez",
+      "P. de Integridad",
+      "P. de Pronunciación",
+    ],
+    datasets: [
+      
+    ],
+  };
+  const algoritmosDataRadar = {
+    labels: [
+      "Duración",
+      "Precisión Mínima",
+      "P. de Precisión",
+      "P. de Fluidez",
+      "P. de Integridad",
+      "P. de Pronunciación",
+    ],
+    datasets: [
+     
+    ],
+  };
+
+  newMyChart = new Chart(myChartBar, {
+    //ok
+    type: "bar",
+    data: algoritmosDataBar,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  newMyChartRadar = new Chart(myChartRadar, {
+    type: "radar",
+    data: algoritmosDataRadar,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3,
+        },
+      },
+    },
+  });
+
+  newMyChartBarCalculados = new Chart(myChartBarCalculados, {
+    type: "bar",
+    data: calculadasDataBar,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  newMyChartRadarCalculados = new Chart(myChartRadarCalculados, {
+    type: "radar",
+    data: calculadasDataRadar,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3,
+        },
+      },
+    },
+  });
 
   //send request
   request.send();
   ttbutton.disabled = true;
   return false;
 };
+
+function addData(chart, data) {
+  chart.data.datasets.forEach((dataset) => {
+    dataset.data.push(data);
+  });
+  chart.update();
+}
+
+function removeData(chart) {
+  chart.data.datasets.forEach((dataset) => {
+    dataset.data.pop();
+  });
+  chart.update();
+}
 
 function gettoken() {
   var request = new XMLHttpRequest();
@@ -166,6 +299,26 @@ function playwordind(word) {
 
 reftext.onclick = function () {
   handleWordClick();
+};
+
+nextAlgoritmosButton.onclick = function () {
+  if (estadisticasAlgoritmos.hidden === true) {
+    estadisticasAlgoritmos.hidden = false;
+    cuadrosAlgoritmos.hidden = true;
+  } else {
+    estadisticasAlgoritmos.hidden = true;
+    cuadrosAlgoritmos.hidden = false;
+  }
+};
+
+nextAlgoritmosCalculadosButton.onclick = function () {
+  if (estadisticasAlgoritmosCalculados.hidden === true) {
+    estadisticasAlgoritmosCalculados.hidden = false;
+    cuadrosAlgoritmosCalculados.hidden = true;
+  } else {
+    estadisticasAlgoritmosCalculados.hidden = true;
+    cuadrosAlgoritmosCalculados.hidden = false;
+  }
 };
 
 function handleWordClick() {
@@ -335,7 +488,7 @@ document.getElementById("buttonmic").onclick = function () {
       start = false;
       stop = true;
       this.innerHTML = "<span class=''></span>Iniciar Grabación";
-      this.className = "button fit icon solid fa-microphone";
+      this.className = "btn btn-primary";
       rec.stop();
       // console.log("stop", start, stop, rec, gumStream);
       //stop microphone access
@@ -366,7 +519,7 @@ document.getElementById("buttonmic").onclick = function () {
       reftextval = reftext.value;
 
       this.innerHTML = "<span class=''></span>Detener Grabación";
-      this.className = "button fit fa icon solid fa-stop";
+      this.className = "btn btn-danger";
       localStorage.setItem(
         "level",
         parseInt(localStorage.getItem("level")) + 1
@@ -439,7 +592,9 @@ function fillDetails(words) {
 }
 
 function fillData(data, durationFull) {
-  let duration_seconds_machine = recording_duration(window.localStorage.getItem("level"));
+  let duration_seconds_machine = recording_duration(
+    window.localStorage.getItem("level")
+  );
   let value_user_words_minute = wordsForMinute(data.Words.length);
   let response_nanosegundos = nanosegundosToSeconds(
     durationFull.toFixed(2).split(".").join("")
@@ -447,7 +602,7 @@ function fillData(data, durationFull) {
   document.getElementById("summarytable").style.display = "flex";
 
   duration.innerText = response_nanosegundos;
-
+  duracion = response_nanosegundos;
   var minAccuracyscore = Math.min.apply(
     Math,
     data.Words.map(function (o) {
@@ -455,30 +610,68 @@ function fillData(data, durationFull) {
     })
   );
   min_accuracyscore.innerText = minAccuracyscore;
+  p_minima = minAccuracyscore;
   updateLocalStorage(window.localStorage.getItem("level"), minAccuracyscore);
   accuracyscore.innerText = data.AccuracyScore;
+  p_precision = data.AccuracyScore;
+
   fluencyscore.innerText = data.FluencyScore;
+  p_fluidez = data.FluencyScore;
   completenessscore.innerText = data.CompletenessScore;
+  p_integridad = data.CompletenessScore;
   pronscore.innerText = parseInt(data.PronScore, 10);
   pronscore.innerText = parseInt(data.PronScore, 10);
+  p_pronunciacion = parseInt(data.PronScore, 10);
+
   /* var estadisticas */
   ineer_num_words.innerText = data.Words.length;
-  ineer_machine_seconds.innerText = recording_duration(window.localStorage.getItem('level'));
+  ineer_machine_seconds.innerText = recording_duration(
+    window.localStorage.getItem("level")
+  );
   ineer_user_seconds.innerText = response_nanosegundos;
 
-  var var_native_words = wordsForMinuteMachine(data.Words.length) / recording_duration(window.localStorage.getItem('level'));
+  var var_native_words =
+    wordsForMinuteMachine(data.Words.length) /
+    recording_duration(window.localStorage.getItem("level"));
   ineer_native_words.innerText = var_native_words.toFixed(2);
 
   ineer_native_words_percentage.innerText = "100,00%";
 
-  var var_user_words = Math.trunc(wordsForMinute(data.Words.length) / Math.round(response_nanosegundos));
+  var var_user_words = Math.trunc(
+    wordsForMinute(data.Words.length) / Math.round(response_nanosegundos)
+  );
   ineer_user_words.innerText = var_user_words; //palabras por minuto
-  var formula_porcentage_user = Math.floor(var_user_words*100) / Math.round(var_native_words);
+  var formula_porcentage_user =
+    Math.floor(var_user_words * 100) / Math.round(var_native_words);
   ineer_user_words_percentage.innerText = Math.trunc(formula_porcentage_user);
   ineer_user_porcentage_user_1.innerText = Math.trunc(formula_porcentage_user);
-  ineer_user_porcentage_user_2.innerText = Math.trunc(formula_porcentage_user);
-//   console.log(var_user_words,var_native_words,formula_porcentage_user);
 
+  callDiagramBar(Math.trunc(formula_porcentage_user), 100); //diagrama de barras
+  callDiagramRadar(
+    response_nanosegundos, //user
+    recording_duration(window.localStorage.getItem("level")), //native
+    minAccuracyscore, //user
+    100, //native
+    p_precision, //user
+    100, //user
+    p_fluidez, //user
+    100, //native
+    p_integridad, //user
+    100, //native
+    Math.trunc(formula_porcentage_user), //user
+    100, //native
+    0, //user
+    0 //native
+  ); //diagrama de radar
+  callChartBarCalculados(p_minima, p_pronunciacion); //diagrama de barras calculada
+  callChartRadarCalculados(
+    p_minima,
+    p_pronunciacion,
+    duracion,
+    p_fluidez,
+    p_integridad,
+    p_pronunciacion
+  ); //diagrama de radar calculado
 
   fillDetails(data.Words);
   wordsomitted.innerText = omittedwords;
@@ -525,6 +718,13 @@ function createDownloadLink(blob) {
       document.getElementById("recordloader").style.display = "none";
       document.getElementById("metrics").style.display = "block";
       ttbutton.disabled = false;
+      //GRABACIÓN
+      console.log(myChartRadarCalculados);
+      var ctx = document
+        .getElementById("myChartRadarCalculados")
+        .getContext("2d");
+
+      console.log(ctx);
     } else {
       alert("Did not catch audio properly! Please try again.");
 
@@ -612,12 +812,11 @@ function roundresult(x) {
 }
 
 function validateStatusLocalStorage() {
-    
-    ineer_level.innerText = 1;
-    ineer_score.innerText = 0;
-    let level = window.localStorage.getItem("level");
-    let score = window.localStorage.getItem("score");
-    let history = window.localStorage.getItem("history");
+  ineer_level.innerText = 1;
+  ineer_score.innerText = 0;
+  let level = window.localStorage.getItem("level");
+  let score = window.localStorage.getItem("score");
+  let history = window.localStorage.getItem("history");
   if (typeof Storage !== "undefined") {
     // Code for localStorage
     if (level != null) {
@@ -680,7 +879,7 @@ function recording_duration(storage) {
       return 21;
       break;
     case "2":
-      console.log("2",storage);
+      console.log("2", storage);
       return 30;
       break;
     case "3":
@@ -704,11 +903,202 @@ function recording_duration(storage) {
   }
 }
 
-function wordsForMinute(w){
-    var words = w * 60;
-    return Math.round(words);
+function wordsForMinute(w) {
+  var words = w * 60;
+  return Math.round(words);
 }
-function wordsForMinuteMachine(w){
-    var words = w * 60;
-    return Math.round(words);
+
+function wordsForMinuteMachine(w) {
+  var words = w * 60;
+  return Math.round(words);
+}
+
+function callDiagramBar(x_user, y_native) {
+  ///////////Diagrama de bar///////////////
+  algoritmosDataBar = {
+    labels: ["Usuario", "Nativo"],
+    datasets: [
+      {
+        label: "Comparacion Usuario-Nativo",
+        data: [x_user, y_native],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
+        borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  newMyChart.destroy();
+  newMyChart = new Chart(myChartBar, {
+    type: "bar",
+    data: algoritmosDataBar,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function callDiagramRadar(
+  a_user,
+  a_native,
+  b_user,
+  b_native,
+  c_user,
+  c_native,
+  d_user,
+  d_native,
+  e_user,
+  e_native,
+  f_user,
+  f_native,
+  g_user,
+  g_native
+) {
+  algoritmosDataRadar = {
+    labels: [
+      "Duración",
+      "Precisión Mínima",
+      "P. de Precisión",
+      "P. de Fluidez",
+      "P. de Integridad",
+      "P. de Pronunciación",
+    ],
+    datasets: [
+      {
+        label: "Dataset usuario",
+        data: [
+          a_user,
+          b_user,
+          c_user,
+          d_user,
+          e_user,
+          f_user,
+          //  , g_user
+        ],
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
+      },
+      {
+        label: "Dataset nativo",
+        data: [
+          a_native,
+          b_native,
+          c_native,
+          d_native,
+          e_native,
+          f_native,
+          //g_native,
+        ],
+        fill: true,
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgb(54, 162, 235)",
+        pointBackgroundColor: "rgb(54, 162, 235)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(54, 162, 235)",
+      },
+    ],
+  };
+  newMyChartRadar.destroy();
+  newMyChartRadar = new Chart(myChartRadar, {
+    type: "radar",
+    data: algoritmosDataRadar,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3,
+        },
+      },
+    },
+  });
+}
+
+function callChartBarCalculados(x_user, y_native) {
+  calculadasDataBar = {
+    labels: ["Precisión mínima", "Puntaje de pronunciación"],
+    datasets: [
+      {
+        label: "Dataset de precisión",
+        data: [x_user, y_native],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
+        borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+  newMyChartBarCalculados.destroy();
+  newMyChartBarCalculados = new Chart(myChartBarCalculados, {
+    type: "bar",
+    data: calculadasDataBar,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function callChartRadarCalculados(
+  p__minima,
+  p__precision,
+  _duracion,
+  p__fluidez,
+  p__integridad,
+  p__pronunciacion
+) {
+  calculadasDataRadar = {
+    labels: [
+      "Precisión Mínima",
+      "P. de Precisión",
+      "Duración",
+      "P. de Fluidez",
+      "P. de Integridad",
+      "P. de Pronunciación",
+    ],
+    datasets: [
+      {
+        label: "Dataset calculado",
+        data: [
+          p__minima,
+          p__precision,
+          _duracion,
+          p__fluidez,
+          p__integridad,
+          p__pronunciacion
+        ],
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
+      },
+    ],
+  };
+
+  newMyChartRadarCalculados.destroy();
+
+  newMyChartRadarCalculados = new Chart(myChartRadarCalculados, {
+    type: "radar",
+    data: calculadasDataRadar,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3,
+        },
+      },
+    },
+  });
 }
