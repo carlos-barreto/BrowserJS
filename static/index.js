@@ -95,7 +95,7 @@ let p_integridad = 0;
 let p_pronunciacion = 0;
 
 var newMyChart;
-
+var newMyChartRadar;
 
 window.onload = () => {
   validateStatusLocalStorage();
@@ -154,28 +154,10 @@ window.onload = () => {
     labels: labels,
     datasets: [
       {
-        label: "Usuario - Nativo",
-        data: [
-          // 65, 59, 80, 81, 56, 55, 40
-        ],
-        backgroundColor: [
-          // 'rgba(255, 99, 132, 0.2)',
-          // 'rgba(255, 159, 64, 0.2)',
-          // 'rgba(255, 205, 86, 0.2)',
-          // 'rgba(75, 192, 192, 0.2)',
-          // 'rgba(54, 162, 235, 0.2)',
-          // 'rgba(153, 102, 255, 0.2)',
-          // 'rgba(201, 203, 207, 0.2)'
-        ],
-        borderColor: [
-          // 'rgb(255, 99, 132)',
-          // 'rgb(255, 159, 64)',
-          // 'rgb(255, 205, 86)',
-          // 'rgb(75, 192, 192)',
-          // 'rgb(54, 162, 235)',
-          // 'rgb(153, 102, 255)',
-          // 'rgb(201, 203, 207)'
-        ],
+        label: "Comparacion Usuario - Nativo",
+        data: [],
+        backgroundColor: [],
+        borderColor: [],
         borderWidth: 1,
       },
     ],
@@ -221,30 +203,7 @@ window.onload = () => {
       "P. de Pronunciación",
       "Running",
     ],
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [65, 59, 90, 81, 56, 55, 40],
-        fill: true,
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgb(255, 99, 132)",
-        pointBackgroundColor: "rgb(255, 99, 132)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgb(255, 99, 132)",
-      },
-      {
-        label: "My Second Dataset",
-        data: [28, 48, 40, 19, 96, 27, 100],
-        fill: true,
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgb(54, 162, 235)",
-        pointBackgroundColor: "rgb(54, 162, 235)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgb(54, 162, 235)",
-      },
-    ],
+    datasets: [],
   };
 
   newMyChart = new Chart(myChartBar, {
@@ -259,7 +218,7 @@ window.onload = () => {
     },
   });
 
-  new Chart(myChartRadar, {
+  newMyChartRadar = new Chart(myChartRadar, {
     type: "radar",
     data: algoritmosDataRadar,
     options: {
@@ -728,7 +687,24 @@ function fillData(data, durationFull) {
     Math.floor(var_user_words * 100) / Math.round(var_native_words);
   ineer_user_words_percentage.innerText = Math.trunc(formula_porcentage_user);
   ineer_user_porcentage_user_1.innerText = Math.trunc(formula_porcentage_user);
-  //   console.log(var_user_words,var_native_words,formula_porcentage_user);
+
+  callDiagramBar(var_user_words, var_native_words); //diagrama de barras
+  callDiagramRadar(
+    response_nanosegundos, //user
+    recording_duration(window.localStorage.getItem("level")), //native
+    minAccuracyscore, //user
+    100, //native
+    p_precision, //user
+    100, //user
+    p_fluidez, //user
+    100, //native
+    p_integridad, //user
+    100, //native
+    Math.trunc(formula_porcentage_user), //user
+    100, //native
+    0, //user
+    0 //native
+  ); //diagrama de radar
 
   fillDetails(data.Words);
   wordsomitted.innerText = omittedwords;
@@ -737,49 +713,6 @@ function fillData(data, durationFull) {
     wordsinserted.style.display = "block";
     wordsinserted.innerText = insertedwords;
   }
-
-  ////////////////////////////////
-  algoritmosDataBar = {
-    labels: labels=[var_native_words,var_user_words],
-    datasets: [
-      {
-        label: "Usuario - Nativo",
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 205, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(201, 203, 207, 0.2)",
-        ],
-        borderColor: [
-          "rgb(255, 99, 132)",
-          "rgb(255, 159, 64)",
-          "rgb(255, 205, 86)",
-          "rgb(75, 192, 192)",
-          "rgb(54, 162, 235)",
-          "rgb(153, 102, 255)",
-          "rgb(201, 203, 207)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-  
-  newMyChart.destroy();
-  newMyChart = new Chart(myChartBar, {
-    type: "bar",
-    data: algoritmosDataBar,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
 }
 
 function createDownloadLink(blob) {
@@ -1011,4 +944,106 @@ function wordsForMinute(w) {
 function wordsForMinuteMachine(w) {
   var words = w * 60;
   return Math.round(words);
+}
+
+function callDiagramBar(x_user, y_native) {
+  ///////////Diagrama de bar///////////////
+  algoritmosDataBar = {
+    labels: (labels = [y_native, x_user]),
+    datasets: [
+      {
+        label: "Comparacion -Usuario",
+        data: [y_native, x_user],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
+        borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  newMyChart.destroy();
+  newMyChart = new Chart(myChartBar, {
+    type: "bar",
+    data: algoritmosDataBar,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function callDiagramRadar(
+  a_user,
+  a_native,
+  b_user,
+  b_native,
+  c_user,
+  c_native,
+  d_user,
+  d_native,
+  e_user,
+  e_native,
+  f_user,
+  f_native,
+  g_user,
+  g_native
+) {
+  algoritmosDataRadar = {
+    labels: [
+      "Duración",
+      "Precisión Mínima",
+      "P. de Precisión",
+      "P. de Fluidez",
+      "P. de Integridad",
+      "P. de Pronunciación",
+      "Running",
+    ],
+    datasets: [
+      {
+        label: "Dataset usuario",
+        data: [a_user, b_user, c_user, d_user, e_user, f_user, g_user],
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
+      },
+      {
+        label: "Dataset nativo",
+        data: [
+          a_native,
+          b_native,
+          c_native,
+          d_native,
+          e_native,
+          f_native,
+          g_native,
+        ],
+        fill: true,
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgb(54, 162, 235)",
+        pointBackgroundColor: "rgb(54, 162, 235)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(54, 162, 235)",
+      },
+    ],
+  };
+  newMyChartRadar.destroy();
+  newMyChartRadar = new Chart(myChartRadar, {
+    type: "radar",
+    data: algoritmosDataRadar,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3,
+        },
+      },
+    },
+  });
 }
