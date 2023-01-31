@@ -63,7 +63,7 @@
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
-                                                    Palabaras
+                                                    Palabras
                                                     <span class="tooltiptext-rigth">Total palabaras</span>
                                                 </div>
                                             </div>
@@ -79,7 +79,7 @@
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
-                                                    Segundos maquina
+                                                    Tiempo nativo (s)
                                                     <span class="tooltiptext-rigth">Segundos que dura un nativo</span>
                                                 </div>
                                             </div>
@@ -93,7 +93,7 @@
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
-                                                    Segundos usuario
+                                                    Tiempo usuario (s)
                                                     <span class="tooltiptext-rigth">Segundos que dura el usuario</span>
                                                 </div>
                                             </div>
@@ -109,7 +109,7 @@
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
-                                                    Nativo
+                                                    Velocidad nativo (pal/min)
                                                     <span class="tooltiptext-rigth">Palabras por minuto de un nativo</span>
                                                 </div>
                                             </div>
@@ -124,7 +124,7 @@
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
-                                                    Usuario
+                                                    Velocidad usuario (pal/min)
                                                     <span class="tooltiptext-rigth">Palabras por minuto del usuario</span>
                                                 </div>
                                             </div>
@@ -137,8 +137,8 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col-6">
-                                        <div class="card text-center h-100" style="display: contents;">
+                                    <div class="col-6" style="display: none;">
+                                        <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
                                                     Puntaje
@@ -233,6 +233,22 @@
                                 <div class="row">
                                     <div class="col-6 mt-2">
                                         <div class="card text-center h-100">
+                                            <div class="card-header">
+                                                <div class="tooltip" style="display: contents">
+                                                    Precisión global
+                                                    <span class="tooltiptext">Precisión de pronunciación de la voz. La precisión indica el grado de coincidencia de los fonemas con la pronunciación
+                                            de un hablante nativo.</span>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <span class="icon fa-circle"></span>
+                                                <span id="accuracyscore"></span>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="col-6 mt-2">
+                                        <div class="card text-center h-100">
                                             <div class="card-header" style="background-color: white">
                                                 <div class="tooltip" style="display: contents">
                                                     Precisión mínima
@@ -245,24 +261,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6 mt-2">
-                                        <div class="card text-center h-100">
-                                            <div class="card-header">
-                                                <div class="tooltip" style="display: contents">
-                                                    Puntuación de precisión
-                                                    <span class="tooltiptext">Precisión de pronunciación de la voz. La precisión indica el grado de coincidencia de los fonemas con la pronunciación
-                                            de un hablante nativo.</span>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <span class="icon fa-circle"></span>
-                                                <span id="accuracyscore"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-6 mt-2">
+                                    <div class="col-6 mt-2" style="display: none;">
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">
@@ -277,7 +278,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-6 mt-2">
+                                    <div class="col-12 mt-2">
                                         <div class="card text-center h-100">
                                             <div class="card-header">
                                                 <div class="tooltip" style="display: contents">

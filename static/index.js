@@ -96,6 +96,8 @@ let p_pronunciacion = 0;
 
 var newMyChart;
 var newMyChartRadar;
+var newMyChartBarCalculados;
+var newMyChartRadarCalculados;
 
 window.onload = () => {
   validateStatusLocalStorage();
@@ -123,44 +125,14 @@ window.onload = () => {
   // const labels = "Meses"
   const labels = [];
   const calculadasDataBar = {
-    labels: labels,
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 205, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(201, 203, 207, 0.2)",
-        ],
-        borderColor: [
-          "rgb(255, 99, 132)",
-          "rgb(255, 159, 64)",
-          "rgb(255, 205, 86)",
-          "rgb(75, 192, 192)",
-          "rgb(54, 162, 235)",
-          "rgb(153, 102, 255)",
-          "rgb(201, 203, 207)",
-        ],
-        borderWidth: 1,
-      },
-    ],
+    //ok
+    labels: [],
+    datasets: [],
   };
   const algoritmosDataBar = {
-    labels: labels,
-    datasets: [
-      {
-        label: "Comparacion Usuario - Nativo",
-        data: [],
-        backgroundColor: [],
-        borderColor: [],
-        borderWidth: 1,
-      },
-    ],
+    //ok
+    labels: [],
+    datasets: [],
   };
 
   const calculadasDataRadar = {
@@ -173,24 +145,7 @@ window.onload = () => {
       "P. de Pronunciación",
     ],
     datasets: [
-      {
-        label: "My First Dataset",
-        data: [
-          p_minima,
-          p_precision,
-          duracion,
-          p_fluidez,
-          p_integridad,
-          p_pronunciacion,
-        ],
-        fill: true,
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgb(255, 99, 132)",
-        pointBackgroundColor: "rgb(255, 99, 132)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgb(255, 99, 132)",
-      },
+      
     ],
   };
   const algoritmosDataRadar = {
@@ -201,12 +156,14 @@ window.onload = () => {
       "P. de Fluidez",
       "P. de Integridad",
       "P. de Pronunciación",
-      "Running",
     ],
-    datasets: [],
+    datasets: [
+     
+    ],
   };
 
   newMyChart = new Chart(myChartBar, {
+    //ok
     type: "bar",
     data: algoritmosDataBar,
     options: {
@@ -229,7 +186,8 @@ window.onload = () => {
       },
     },
   });
-  new Chart(myChartBarCalculados, {
+
+  newMyChartBarCalculados = new Chart(myChartBarCalculados, {
     type: "bar",
     data: calculadasDataBar,
     options: {
@@ -241,7 +199,7 @@ window.onload = () => {
     },
   });
 
-  new Chart(myChartRadarCalculados, {
+  newMyChartRadarCalculados = new Chart(myChartRadarCalculados, {
     type: "radar",
     data: calculadasDataRadar,
     options: {
@@ -688,7 +646,7 @@ function fillData(data, durationFull) {
   ineer_user_words_percentage.innerText = Math.trunc(formula_porcentage_user);
   ineer_user_porcentage_user_1.innerText = Math.trunc(formula_porcentage_user);
 
-  callDiagramBar(var_user_words, var_native_words); //diagrama de barras
+  callDiagramBar(Math.trunc(formula_porcentage_user), 100); //diagrama de barras
   callDiagramRadar(
     response_nanosegundos, //user
     recording_duration(window.localStorage.getItem("level")), //native
@@ -705,6 +663,15 @@ function fillData(data, durationFull) {
     0, //user
     0 //native
   ); //diagrama de radar
+  callChartBarCalculados(p_minima, p_pronunciacion); //diagrama de barras calculada
+  callChartRadarCalculados(
+    p_minima,
+    p_pronunciacion,
+    duracion,
+    p_fluidez,
+    p_integridad,
+    p_pronunciacion
+  ); //diagrama de radar calculado
 
   fillDetails(data.Words);
   wordsomitted.innerText = omittedwords;
@@ -949,11 +916,11 @@ function wordsForMinuteMachine(w) {
 function callDiagramBar(x_user, y_native) {
   ///////////Diagrama de bar///////////////
   algoritmosDataBar = {
-    labels: (labels = [y_native, x_user]),
+    labels: ["Usuario", "Nativo"],
     datasets: [
       {
-        label: "Comparacion -Usuario",
-        data: [y_native, x_user],
+        label: "Comparacion Usuario-Nativo",
+        data: [x_user, y_native],
         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
         borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
         borderWidth: 1,
@@ -999,12 +966,19 @@ function callDiagramRadar(
       "P. de Fluidez",
       "P. de Integridad",
       "P. de Pronunciación",
-      "Running",
     ],
     datasets: [
       {
         label: "Dataset usuario",
-        data: [a_user, b_user, c_user, d_user, e_user, f_user, g_user],
+        data: [
+          a_user,
+          b_user,
+          c_user,
+          d_user,
+          e_user,
+          f_user,
+          //  , g_user
+        ],
         fill: true,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgb(255, 99, 132)",
@@ -1022,7 +996,7 @@ function callDiagramRadar(
           d_native,
           e_native,
           f_native,
-          g_native,
+          //g_native,
         ],
         fill: true,
         backgroundColor: "rgba(54, 162, 235, 0.2)",
@@ -1038,6 +1012,87 @@ function callDiagramRadar(
   newMyChartRadar = new Chart(myChartRadar, {
     type: "radar",
     data: algoritmosDataRadar,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3,
+        },
+      },
+    },
+  });
+}
+
+function callChartBarCalculados(x_user, y_native) {
+  calculadasDataBar = {
+    labels: ["Precisión mínima", "Puntaje de pronunciación"],
+    datasets: [
+      {
+        label: "Dataset de precisión",
+        data: [x_user, y_native],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
+        borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+  newMyChartBarCalculados.destroy();
+  newMyChartBarCalculados = new Chart(myChartBarCalculados, {
+    type: "bar",
+    data: calculadasDataBar,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function callChartRadarCalculados(
+  p__minima,
+  p__precision,
+  _duracion,
+  p__fluidez,
+  p__integridad,
+  p__pronunciacion
+) {
+  calculadasDataRadar = {
+    labels: [
+      "Precisión Mínima",
+      "P. de Precisión",
+      "Duración",
+      "P. de Fluidez",
+      "P. de Integridad",
+      "P. de Pronunciación",
+    ],
+    datasets: [
+      {
+        label: "Dataset calculado",
+        data: [
+          p__minima,
+          p__precision,
+          _duracion,
+          p__fluidez,
+          p__integridad,
+          p__pronunciacion
+        ],
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
+      },
+    ],
+  };
+
+  newMyChartRadarCalculados.destroy();
+
+  newMyChartRadarCalculados = new Chart(myChartRadarCalculados, {
+    type: "radar",
+    data: calculadasDataRadar,
     options: {
       elements: {
         line: {
